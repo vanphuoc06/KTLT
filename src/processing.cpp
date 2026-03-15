@@ -80,25 +80,29 @@ int calculate_MaxProfit(Stock &stock)
 {
     int start = 0;
     int end = 0;
+    int temp_start;
     double Max_Profit = -1e9;
-    double MaxSoFar = stock.sessions[0].close;
-    double MaxEndingHere = stock.sessions[0].close;
+    double MaxEndingHere = 0;
     for (int i = 1; i < stock.sessions.size(); i++)
     {
-        if(stock.sessions[i].close> MaxEndingHere + stock.sessions[i].close)
+        double diff = stock.sessions[i].close - stock.sessions[i - 1].close;
+        if (MaxEndingHere < 0)
         {
-            MaxEndingHere=stock.sessions[i].close;
+            MaxEndingHere = diff;
+            temp_start = i - 1;
         }
         else
         {
-            MaxEndingHere+=stock.sessions[i].close;
+            MaxEndingHere += diff;
         }
-        if (MaxSoFar < MaxEndingHere)
+        if (Max_Profit < MaxEndingHere)
         {
-            MaxSoFar = MaxEndingHere;
-            end = i;
+            Max_Profit = MaxEndingHere;
+            start=temp_start;
+            end=i;
         }
     }
+    
 }
 void Longest_Increasing_Subarray()
 {

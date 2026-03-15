@@ -3,8 +3,6 @@
 #include <string>
 #include "struct.h"
 using namespace std;
-
-
 int main()
 {
 int k;
