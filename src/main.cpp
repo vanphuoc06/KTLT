@@ -8,7 +8,7 @@ int main()
     double S;
     Portfolio portfolio;
     read_configTXT("Input/config.txt", k, S);
-    read_PortfolioCSV("Input/portfolio3.csv", portfolio); 
+    read_PortfolioCSV("Input/portfolio1.csv", portfolio); 
     processing_missing_data(portfolio); 
     calculate_Statistics(portfolio); 
     calculate_MA(portfolio, k);         
