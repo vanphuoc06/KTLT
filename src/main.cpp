@@ -8,13 +8,13 @@ int main()
     double S;
     Portfolio portfolio;
     read_configTXT("Input/config.txt", k, S);
-    read_PortfolioCSV("Input/portfolio1.csv", portfolio); 
-    processing_missing_data(portfolio); 
-    calculate_Statistics(portfolio); 
-    calculate_MA(portfolio, k);         
+    read_PortfolioCSV("Input/test_edge_empty.csv", portfolio); 
+    processing_missing_data(portfolio);       
+    calculate_MA(portfolio, k);
+    Signals("Output/signals.txt", portfolio, S);
+    BestPeriod("Output/best_period.txt", portfolio);
+    calculate_Statistics(portfolio);         
     Analysis("Output/Analysis.csv", portfolio);
-    Signals("Output/Signals.csv",portfolio);
-    BestPeriod("Output/BestPeriod.csv", portfolio, S);
     cout<<"Chuong trinh da chay xong";
     return 0;
 }

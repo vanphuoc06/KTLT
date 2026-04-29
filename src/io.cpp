@@ -3,8 +3,7 @@
 #include <sstream>
 #include <fstream>
 #include <string>
-#include <string.h>
-#include <bits/stdc++.h>
+
 using namespace std;
 void read_configTXT(string file_path, int &k, double &S)
 {
@@ -38,10 +37,13 @@ void read_PortfolioCSV(string file_path, Portfolio &portfolio)
         {
             continue;
         }
-        getline(ss, date, ',');
         getline(ss, close, ',');
+        getline(ss, ticker, ',');
         getline(ss, volume, ',');
-        getline(ss, ticker, '\n');
+        getline(ss, date, '\n');
+        
+        date.erase(remove(date.begin(), date.end(), '\r'), date.end());
+
         session.close = (close.empty() || close == "NA") ? -1 : stod(close);
         session.volume = (volume.empty() || volume == "NA") ? -1 : stol(volume);
         session.date = (date.empty() || date == "NA") ? "Khong tim thay" : date;
@@ -85,24 +87,33 @@ void Analysis(string file_path, Portfolio &portfolio)
     }
     output_file.close();
 }
-void Signals(string file_path, Portfolio &portfolio)
+void Signals(string file_path, Portfolio &portfolio, double S)
 {
-    string start_date, end_date;
+    string start_date_lis, end_date_lis;
+    string start_date_sw, end_date_sw;
     ofstream output_file(file_path);
     if (!output_file.is_open())
     {
         cout << "File not found \n";
         return;
     }
-    output_file << "Ticker,Chuoi_ngay_tang_dai_nhat,Ngay_bat_dau,Ngay_ket_thuc\n";
+    output_file << " SIGNALS \n\n";
     for (int i = 0; i < portfolio.stocks.size(); i++)
     {
-        int max_len = Longest_Increasing_Subarray(portfolio.stocks[i], start_date, end_date);
-        output_file << portfolio.stocks[i].ticker << "," << max_len << "," << start_date << "," << end_date << "\n";
+        int max_len = Longest_Increasing_Subarray(portfolio.stocks[i], start_date_lis, end_date_lis);
+        int shortest_window = findShortestWindowForTargetProfit(portfolio.stocks[i], S, start_date_sw, end_date_sw);
+        output_file << "Ma co phieu [" << portfolio.stocks[i].ticker << "]\n";
+        output_file << "  Chuoi tang lien tiep dai nhat : " << max_len << " phien (" << start_date_lis << " -> " << end_date_lis << ")\n";
+        output_file << "  Chuoi ngay ngan nhat dat loi nhuan >= " << S << " : ";
+        if (shortest_window == -1)
+            output_file << "Khong dat duoc muc tieu\n";
+        else
+            output_file << shortest_window << " phien (" << start_date_sw << " -> " << end_date_sw << ")\n";
+        output_file << "\n";
     }
     output_file.close();
 }
-void BestPeriod(string file_path, Portfolio &portfolio, double S)
+void BestPeriod(string file_path, Portfolio &portfolio)
 {
     ofstream output_file(file_path);
     if (!output_file.is_open())
@@ -110,14 +121,16 @@ void BestPeriod(string file_path, Portfolio &portfolio, double S)
         cout << "File not found \n";
         return;
     }
-    output_file << "Ticker,Max_Profit,Ngay_mua,Ngay_ban,Loi_nhuan_muc_tieu,Ngay_mua_dat_muc_tieu,Ngay_ban_dat_muc_tieu\n";
+    output_file << " BEST PERIOD \n\n";
     for (int i = 0; i < portfolio.stocks.size(); i++)
     {
-        string start_max_profit, end_max_profit, start_S, end_S;
+        string start_max_profit, end_max_profit;
         double max_profit = calculate_MaxProfit(portfolio.stocks[i], start_max_profit, end_max_profit);
-        int max_len = findShortestWindowForTargetProfit(portfolio.stocks[i], S, start_S, end_S);
-        output_file << portfolio.stocks[i].ticker << "," << max_profit << "," << start_max_profit << "," << end_max_profit << "," << S << "," << start_S << "," << end_S << "\n";
+        output_file << "Ma co phieu [" << portfolio.stocks[i].ticker << "]\n";
+        output_file << "  Loi nhuan cao nhat : " << max_profit << "\n";
+        output_file << "  Ngay mua: " << start_max_profit << "\n";
+        output_file << "  Ngay ban: " << end_max_profit << "\n";
+        output_file << "\n";
     }
-
     output_file.close();
 }

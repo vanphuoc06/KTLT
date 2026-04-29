@@ -1,5 +1,7 @@
 #include "processing.h"
 #include <algorithm>
+
+using namespace std;
 int check_empty(Stock &stock, string &start_date, string &end_date)
 {
     if (stock.sessions.empty())
@@ -107,21 +109,16 @@ void calculate_MA(Portfolio &portfolio, int k)
 {
     for (int i = 0; i < portfolio.stocks.size(); i++)
     {
+        vector<double> prefix = Prefix_Sum(portfolio.stocks[i]);
         for (int j = 0; j < portfolio.stocks[i].sessions.size(); j++)
         {
             double sum = 0;
-            int count = 0;
-            if (j - k >= -1)
+            int left = max(0, j - k + 1);
+            int right = j;
+            Query_PrefixSum(prefix, left, right, sum);
+            if (sum != -1 && right >= left)
             {
-                for (int l = j; l > j - k && l >= 0; l--)
-                {
-                    sum += portfolio.stocks[i].sessions[l].close;
-                    count++;
-                }
-            }
-            if (count > 0)
-            {
-                portfolio.stocks[i].sessions[j].ma = sum / count;
+                portfolio.stocks[i].sessions[j].ma = sum / (right - left + 1);
             }
             else
             {
@@ -223,9 +220,12 @@ int findShortestWindowForTargetProfit(Stock &stock, double &target, string &star
     double current_sum = 0;
     start_date = "NA";
     end_date = "NA";
+    
+    vector<double> prefix = Prefix_Sum(stock);
+
     for (int right = 0; right < stock.sessions.size(); right++)
     {
-        current_sum += stock.sessions[right].close;
+        Query_PrefixSum(prefix, left, right, current_sum);
         while (current_sum >= target && left <= right)
         {
             if (min_len > right - left + 1)
@@ -234,8 +234,10 @@ int findShortestWindowForTargetProfit(Stock &stock, double &target, string &star
                 start_date = stock.sessions[left].date;
                 end_date = stock.sessions[right].date;
             }
-            current_sum -= stock.sessions[left].close;
             left++;
+            if (left <= right) {
+                Query_PrefixSum(prefix, left, right, current_sum);
+            }
         }
     }
     if (min_len == 1e9)

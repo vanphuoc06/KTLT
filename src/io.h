@@ -1,6 +1,5 @@
 #ifndef IO_H
 #define IO_H
-
 #include <iostream>
 #include <string>
 #include "struct.h"
@@ -11,7 +10,7 @@ void read_PortfolioCSV(string file_path,Portfolio &portfolio);
 
 void Analysis(string file_path, Portfolio &portfolio);
 
-void Signals(string file_path, Portfolio &portfolio);
+void Signals(string file_path, Portfolio &portfolio, double S);
 
-void BestPeriod(string file_path, Portfolio &portfolio, double S);
+void BestPeriod(string file_path, Portfolio &portfolio);
 #endif 

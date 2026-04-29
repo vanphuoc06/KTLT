@@ -5,7 +5,7 @@
 #include<vector>
 #include<string>
 #include<cmath>
-
+using namespace std;
 void processing_missing_data(Portfolio &portfolio);
 
 void calculate_Statistics(Portfolio &portfolio);
