@@ -8,7 +8,7 @@ int main()
     double S;
     Portfolio portfolio;
     read_configTXT("Input/config.txt", k, S);
-    read_PortfolioCSV("Input/test_edge_empty.csv", portfolio); 
+    read_PortfolioCSV("Input/test_edge_decreasing.csv", portfolio); 
     processing_missing_data(portfolio);       
     calculate_MA(portfolio, k);
     Signals("Output/signals.txt", portfolio, S);

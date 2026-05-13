@@ -5,6 +5,8 @@
 #include <string>
 
 using namespace std;
+
+//Hàm đọc tham số k và S từ file config.txt
 void read_configTXT(string file_path, int &k, double &S)
 {
     ifstream input_file(file_path);
@@ -18,6 +20,7 @@ void read_configTXT(string file_path, int &k, double &S)
     return;
 }
 
+//Hàm đọc dữ liệu giao dịch cổ phiếu từ file CSV
 void read_PortfolioCSV(string file_path, Portfolio &portfolio)
 {
     ifstream input_file(file_path);
@@ -87,6 +90,8 @@ void Analysis(string file_path, Portfolio &portfolio)
     }
     output_file.close();
 }
+
+//Xuất ra báo cáo về các tín hiệu giao dịch(LIS,Sliding Window)
 void Signals(string file_path, Portfolio &portfolio, double S)
 {
     string start_date_lis, end_date_lis;
@@ -113,6 +118,8 @@ void Signals(string file_path, Portfolio &portfolio, double S)
     }
     output_file.close();
 }
+
+//Xuất ra kỳ giao dịch mang lại lợi nhuận tốt nhất(Max Profit)
 void BestPeriod(string file_path, Portfolio &portfolio)
 {
     ofstream output_file(file_path);
@@ -126,7 +133,7 @@ void BestPeriod(string file_path, Portfolio &portfolio)
     {
         string start_max_profit, end_max_profit;
         double max_profit = calculate_MaxProfit(portfolio.stocks[i], start_max_profit, end_max_profit);
-        output_file << "Ma co phieu [" << portfolio.stocks[i].ticker << "]\n";
+        output_file << "Ma co phieu [" << portfolio.stocks[i].ticker << "]\n"; 
         output_file << "  Loi nhuan cao nhat : " << max_profit << "\n";
         output_file << "  Ngay mua: " << start_max_profit << "\n";
         output_file << "  Ngay ban: " << end_max_profit << "\n";

@@ -2,17 +2,20 @@
 #include <algorithm>
 
 using namespace std;
+
+//Hàm kiểm tra mã cổ phiếu có bị rỗng hay không 
 int check_empty(Stock &stock, string &start_date, string &end_date)
 {
     if (stock.sessions.empty())
     {
         start_date = "NA";
         end_date = "NA";
-        return 0;
+        return 0; 
     }
     return 1;
 }
 
+//Hàm xử lý missing data
 void processing_missing_data(Portfolio &portfolio)
 {
     for (int i = 0; i < portfolio.stocks.size(); i++)
@@ -38,6 +41,8 @@ void processing_missing_data(Portfolio &portfolio)
         }
     }
 }
+
+//Hàm tính toán các chỉ số thống kê và chuẩn hóa giá cổ phiếu(Min-Max Scaling)
 void calculate_Statistics(Portfolio &portfolio)
 {
     double global_max_stock = -1e9;
@@ -105,6 +110,8 @@ void calculate_Statistics(Portfolio &portfolio)
         }
     }
 }
+
+//Hàm tính Moving Average(MA) cho k ngày
 void calculate_MA(Portfolio &portfolio, int k)
 {
     for (int i = 0; i < portfolio.stocks.size(); i++)
@@ -127,6 +134,8 @@ void calculate_MA(Portfolio &portfolio, int k)
         }
     }
 }
+
+//Hàm tìm lợi nhuận cao nhất (Kadane)
 double calculate_MaxProfit(Stock &stock, string &start_date, string &end_date)
 {
     if (check_empty(stock, start_date, end_date) == 0)
@@ -175,6 +184,8 @@ double calculate_MaxProfit(Stock &stock, string &start_date, string &end_date)
     end_date = stock.sessions[end].date;
     return Max_Profit;
 }
+
+//Hàm tìm chuỗi ngày tăng giá liên tiếp dài nhất(Longest Increasing Subarray)
 int Longest_Increasing_Subarray(Stock &stock, string &start_date, string &end_date)
 {
     if (check_empty(stock, start_date, end_date) == 0)
@@ -208,6 +219,8 @@ int Longest_Increasing_Subarray(Stock &stock, string &start_date, string &end_da
     end_date = stock.sessions[end].date;
     return max_len;
 }
+
+//Hàm Sliding Window để tìm cửa sổ ngắn nhất có tổng giá trị >=giá trị mục tiêu S
 int findShortestWindowForTargetProfit(Stock &stock, double &target, string &start_date, string &end_date)
 {
     if (check_empty(stock, start_date, end_date) == 0)
@@ -246,6 +259,8 @@ int findShortestWindowForTargetProfit(Stock &stock, double &target, string &star
     }
     return min_len;
 }
+
+//Hàm tạo mảng cộng dồn(Prefix Sum)
 vector<double> Prefix_Sum(Stock &stock)
 {
     vector<double> prefix(stock.sessions.size() + 1, 0);
@@ -255,6 +270,8 @@ vector<double> Prefix_Sum(Stock &stock)
     }
     return prefix;
 }
+
+//Hàm truy vấn tổng trong đoạn [left,right] dựa trên Prefix Sum
 void Query_PrefixSum(vector<double> &Prefix_Sum, int left, int right, double &result)
 {
     if (left < 0 || right < left || right >= Prefix_Sum.size() - 1)
