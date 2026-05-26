@@ -147,7 +147,7 @@ Chương trình được thiết kế để xử lý an toàn các tình huống
 | **File CSV rỗng (chỉ có header)** | `Portfolio.stocks` rỗng. Vòng lặp không thực thi. Output files được tạo nhưng không có nội dung cổ phiếu. |
 | **Dữ liệu thiếu (NA)** | `read_PortfolioCSV` gán `close = -1`. `processing_missing_data` nội suy từ phiên trước/sau, hoặc gán `0` nếu chỉ có 1 phiên. |
 | **Chỉ có 1 phiên giao dịch** | `calculate_MaxProfit` trả về `0` (không thể mua rồi bán). `Longest_Increasing_Subarray` trả về `1`. |
-| **Giá chỉ giảm liên tục** | Kadane trả về giá trị âm. `BestPeriod` vẫn in ngày mua/bán nhưng kèm thêm dòng khuyến nghị không nên giao dịch. |
+| **Giá chỉ giảm liên tục** | Kadane trả về giá trị âm. `BestPeriod` vẫn in ngày mua/bán tương ứng với mức lỗ thấp nhất. |
 | **LIS không tìm được chuỗi tăng** | Mặc định trả về `1` (mọi phiên đơn lẻ đều là chuỗi dài 1). |
 | **Sliding Window không đạt ngưỡng S** | `min_len` vẫn bằng `1e9` sau khi duyệt xong → trả về `-1`. Output ghi `"Khong dat duoc muc tieu"`. |
 
@@ -162,7 +162,7 @@ Hệ thống được kiểm thử với **5 bộ dữ liệu** bao gồm cả t
 | TC1 | `test_logic_fluctuating.csv` | Nhiều phiên, giá lên xuống đan xen, không có NA | Toàn bộ pipeline: MA, Kadane, LIS, Sliding Window |
 | TC2 | `test_edge_1_row.csv` | Chỉ có **1 dòng** dữ liệu duy nhất | Edge Case: không crash, output hợp lệ với 1 phiên |
 | TC3 | `test_edge_empty.csv` | File CSV **không có dữ liệu** (chỉ có header) | Edge Case: mảng rỗng, không truy cập ngoài vùng nhớ |
-| TC4 | `test_edge_decreasing.csv` | Giá **liên tục giảm** toàn bộ chuỗi | Kadane với Bear Market: lợi nhuận âm + khuyến nghị |
+| TC4 | `test_edge_decreasing.csv` | Giá **liên tục giảm** toàn bộ chuỗi | Kadane với Bear Market: lợi nhuận âm |
 | TC5 | `test_edge_big_data.csv` | Tập dữ liệu lớn nhiều phiên | Stress Test: hiệu năng, không bị treo hay tràn bộ nhớ |
 
 **Kỳ vọng Output:**
@@ -170,7 +170,7 @@ Hệ thống được kiểm thử với **5 bộ dữ liệu** bao gồm cả t
 - **TC1:** `best_period.txt` ghi lợi nhuận dương kèm ngày mua/bán. `signals.txt` ghi chuỗi tăng > 1 và cửa sổ đạt S. `Analysis.csv` ghi giá chuẩn hóa `[0, 1]`.
 - **TC2:** `best_period.txt` ghi `Loi nhuan cao nhat : 0`, ngày mua = ngày bán. `signals.txt` ghi chuỗi dài nhất = 1 phiên.
 - **TC3:** Tất cả output files được tạo ra nhưng không có nội dung cổ phiếu bên trong.
-- **TC4:** `best_period.txt` ghi lợi nhuận âm + `Khuyen nghi: Khong nen thuc hien mua`. `signals.txt` ghi chuỗi tăng = 1 phiên.
+- **TC4:** `best_period.txt` ghi lợi nhuận âm. `signals.txt` ghi chuỗi tăng = 1 phiên.
 - **TC5:** Chương trình chạy hoàn thành, kết quả đúng trong thời gian hợp lý.
 
 ---
