@@ -117,14 +117,14 @@ void calculate_Statistics(Portfolio &portfolio)
     {
         for (int j = 0; j < portfolio.stocks[i].sessions.size(); j++)
         {
-            Session &Session = portfolio.stocks[i].sessions[j];
+            Session &session = portfolio.stocks[i].sessions[j];
             if (global_max_stock > global_min_stock)
             {
-                Session.close = (Session.close - global_min_stock) / (global_max_stock - global_min_stock);
+                session.close = (session.close - global_min_stock) / (global_max_stock - global_min_stock);
             }
             else
             {
-                Session.close = 0;
+                session.close = 0;
             }
         }
     }
