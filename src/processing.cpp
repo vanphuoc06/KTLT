@@ -185,6 +185,7 @@ double calculate_MaxProfit(Stock &stock, string &start_date, string &end_date)
         double diff = stock.sessions[i].close - stock.sessions[i - 1].close;
         if (MaxEndingHere < 0)
         {
+            // Nếu tổng lợi nhuận tích lũy bị âm, ta bỏ chuỗi cũ và bắt đầu tính chuỗi giao dịch mới
             MaxEndingHere = diff;
             temp_start = i - 1;
         }
@@ -260,6 +261,7 @@ int findShortestWindowForTargetProfit(Stock &stock, double &target, string &star
         Query_PrefixSum(prefix, left, right, current_sum);
         while (current_sum >= target && left <= right)
         {
+            // Rút ngắn cửa sổ từ bên trái nếu tổng hiện tại vẫn thỏa mãn mục tiêu lợi nhuận
             if (min_len > right - left + 1)
             {
                 min_len = right - left + 1;
