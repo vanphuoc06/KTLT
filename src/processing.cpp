@@ -22,16 +22,35 @@ void processing_missing_data(Portfolio &portfolio)
     {
         for (int j = 0; j < portfolio.stocks[i].sessions.size(); j++)
         {
-
             if (portfolio.stocks[i].sessions[j].close == -1)
             {
+                double prev_val = -1;
+                double next_val = -1;
+
                 if (j > 0)
                 {
-                    portfolio.stocks[i].sessions[j].close = portfolio.stocks[i].sessions[j - 1].close;
+                    prev_val = portfolio.stocks[i].sessions[j - 1].close;
                 }
-                else if (j + 1 < portfolio.stocks[i].sessions.size())
+                for (int k = j + 1; k < portfolio.stocks[i].sessions.size(); k++)
                 {
-                    portfolio.stocks[i].sessions[j].close = portfolio.stocks[i].sessions[j + 1].close;
+                    if (portfolio.stocks[i].sessions[k].close != -1)
+                    {
+                        next_val = portfolio.stocks[i].sessions[k].close;
+                        break;
+                    }
+                }
+
+                if (prev_val != -1 && next_val != -1)
+                {
+                    portfolio.stocks[i].sessions[j].close = (prev_val + next_val) / 2.0;
+                }
+                else if (prev_val == -1 && next_val != -1)
+                {
+                    portfolio.stocks[i].sessions[j].close = next_val;
+                }
+                else if (prev_val != -1 && next_val == -1)
+                {
+                    portfolio.stocks[i].sessions[j].close = prev_val;
                 }
                 else
                 {
