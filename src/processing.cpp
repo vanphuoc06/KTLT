@@ -161,20 +161,14 @@ double calculate_MaxProfit(Stock &stock, string &start_date, string &end_date)
     {
         return -1;
     }
-    if (stock.sessions.size() <= 1)
+
+    if (stock.sessions.size() == 1)
     {
-        if (stock.sessions.empty())
-        {
-            start_date = "NA";
-            end_date = "NA";
-        }
-        else
-        {
-            start_date = stock.sessions[0].date;
-            end_date = stock.sessions[0].date;
-        }
+        start_date = stock.sessions[0].date;
+        end_date = stock.sessions[0].date;
         return 0;
     }
+    
     int start = 0;
     int end = 0;
     int temp_start = 0;
