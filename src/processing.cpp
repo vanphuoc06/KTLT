@@ -61,6 +61,28 @@ void processing_missing_data(Portfolio &portfolio)
     }
 }
 
+//Hàm tạo mảng cộng dồn(Prefix Sum)
+vector<double> Prefix_Sum(Stock &stock)
+{
+    vector<double> prefix(stock.sessions.size() + 1, 0);
+    for (int i = 1; i <= stock.sessions.size(); i++)
+    {
+        prefix[i] = prefix[i - 1] + stock.sessions[i - 1].close;
+    }
+    return prefix;
+}
+
+//Hàm truy vấn tổng trong đoạn [left,right] dựa trên Prefix Sum
+void Query_PrefixSum(vector<double> &Prefix_Sum, int left, int right, double &result)
+{
+    if (left < 0 || right < left || right >= Prefix_Sum.size() - 1)
+    {
+        result = -1;
+        return;
+    }
+    result = Prefix_Sum[right + 1] - Prefix_Sum[left];
+}
+
 //Hàm tính toán các chỉ số thống kê và chuẩn hóa giá cổ phiếu(Min-Max Scaling)
 void calculate_Statistics(Portfolio &portfolio)
 {
@@ -168,7 +190,7 @@ double calculate_MaxProfit(Stock &stock, string &start_date, string &end_date)
         end_date = stock.sessions[0].date;
         return 0;
     }
-    
+
     int start = 0;
     int end = 0;
     int temp_start = 0;
@@ -241,8 +263,8 @@ int findShortestWindowForTargetProfit(Stock &stock, double &target, string &star
     {
         return -1;
     }
-    int left = 0;
 
+    int left = 0;
     int min_len = 1e9;
     double current_sum = 0;
     start_date = "NA";
@@ -273,26 +295,4 @@ int findShortestWindowForTargetProfit(Stock &stock, double &target, string &star
         min_len = -1;
     }
     return min_len;
-}
-
-//Hàm tạo mảng cộng dồn(Prefix Sum)
-vector<double> Prefix_Sum(Stock &stock)
-{
-    vector<double> prefix(stock.sessions.size() + 1, 0);
-    for (int i = 1; i <= stock.sessions.size(); i++)
-    {
-        prefix[i] = prefix[i - 1] + stock.sessions[i - 1].close;
-    }
-    return prefix;
-}
-
-//Hàm truy vấn tổng trong đoạn [left,right] dựa trên Prefix Sum
-void Query_PrefixSum(vector<double> &Prefix_Sum, int left, int right, double &result)
-{
-    if (left < 0 || right < left || right >= Prefix_Sum.size() - 1)
-    {
-        result = -1;
-        return;
-    }
-    result = Prefix_Sum[right + 1] - Prefix_Sum[left];
 }
