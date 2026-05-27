@@ -45,8 +45,6 @@ void read_PortfolioCSV(string file_path, Portfolio &portfolio)
         getline(ss, ticker, ',');
         getline(ss, volume, ',');
         getline(ss, date, '\n');
-        
-        date.erase(remove(date.begin(), date.end(), '\r'), date.end());
 
         session.close = (close.empty() || close == "NA") ? -1 : stod(close);
         session.volume = (volume.empty() || volume == "NA") ? -1 : stol(volume);
